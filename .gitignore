@@ -1,0 +1,5 @@
+archive.zip
+*copy*
+data/raw/history.csv
+archive/*stocks.csv
+*.DS_store
