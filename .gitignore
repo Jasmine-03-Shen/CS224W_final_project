@@ -1,5 +1,6 @@
 archive.zip
 *copy*
-data/raw/history.csv
+data/*
 archive/*stocks.csv
 *.DS_store
+dataset_test.ipynb
