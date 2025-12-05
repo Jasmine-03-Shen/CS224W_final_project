@@ -4,3 +4,8 @@ data/*
 archive/*stocks.csv
 *.DS_store
 dataset_test.ipynb
+*.pth
+tgcn.py
+lstmgcn.py
+wandb/
+__pycache__/
