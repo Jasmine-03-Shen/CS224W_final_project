@@ -127,7 +127,7 @@ for epoch in range(num_epochs):
             "intermediate_test_loss": avg_test_loss,
         })
 
-model.load_state_dict(torch.load(f'{temporal_model_type}_best_model_{n_layers}_{use_gat}.pth'))
+model.load_state_dict(torch.load(f'{temporal_model_type}_best_model_{n_layers}_{gnn_type}.pth'))
 model.eval()
 test_loss = 0
 with torch.no_grad():
