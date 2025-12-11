@@ -28,6 +28,8 @@ class SP500(Dataset):
         return self.feats.shape[-1] - self.past_window - self.fut_window
     
     def get(self, idx: int):
+        # for x, use all features ('NormClose', 'DailyLogReturn', 'ALR1W', 'ALR2W', 'ALR1M', 'ALR2M', 'RSI', 'MACD') except the first two ('Close', 'Volume')
+        # for y, use 'NormClose'
         return Data(x=self.feats[:, 2:, idx:idx+self.past_window], edge_index=self.edge_index, edge_attr=self.edge_attr, y=self.feats[:, 2, idx+self.past_window:idx+self.past_window+self.fut_window])
     
 if __name__ == "__main__":
