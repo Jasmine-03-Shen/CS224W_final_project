@@ -15,7 +15,7 @@ argparser.add_argument('--batch_size', type=int, default=32, help='batch size fo
 argparser.add_argument('--gnn_type', type=str, default='gat', help='type of GCN model to use: gcn or gat')
 argparser.add_argument('--temporal_model', type=str, default='LSTMGCN', help='type of temporal model to use: TGCN or LSTMGCN')
 argparser.add_argument('--epochs', type=int, default=200, help='number of training epochs')
-argparser.add_argument('--device', type=str, default='cuda:4', help='device to use for training')
+argparser.add_argument('--device', type=str, default='cuda:0', help='device to use for training')
 args = argparser.parse_args()
 
 past_window = args.past_window
@@ -48,6 +48,7 @@ device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
 
 criterion = torch.nn.MSELoss()
 
+# load best model and evaluate on test set
 model.load_state_dict(torch.load(f'{temporal_model_type}_best_model_{n_layers}_{gnn_type}.pth'))
 model = model.to(device)
 model.eval()
