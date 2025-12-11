@@ -29,11 +29,9 @@ n_layers = args.n_layers
 batch_size = args.batch_size
 gnn_type = args.gnn_type
 temporal_model_type = args.temporal_model
+
+# load dataset
 dataset = SP500(past_window=past_window)
-# dataset = SP500(feat_file='./data/processed/feature_small.pt',
-#                 label_file='./data/processed/daily_log_return_y_small.pt',
-#                 edge_attr_file='./data/processed/edge_attr_small.pt',
-#                 edge_index_file='./data/processed/edge_index_small.pt')
 print(dataset)
 train_size = int(0.8 * len(dataset))
 val_size = int(0.1 * len(dataset))
@@ -42,12 +40,14 @@ train_dataset, val_dataset, test_dataset = dataset[:train_size], dataset[train_s
 
 print(f'train size: {len(train_dataset)} val size: {len(val_dataset)} test size: {len(test_dataset)}')
 
+# create dataloaders
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
 in_channels = dataset[0].x.shape[-2]
 out_channels = 1
+# initialize model
 if temporal_model_type == 'TGCN':
     model = TGCN(in_channels, out_channels, hidden_size, n_layers, gnn_layers=args.gnn_layers, gnn_type=gnn_type)
 elif temporal_model_type == 'LSTMGCN':
@@ -84,6 +84,7 @@ wandb.init(project="cs224w-final-project",
 })
 print(model)
 best_val_loss = float('inf')
+# training loop
 for epoch in range(num_epochs):
     print(f'--- Epoch {epoch+1} ---')
     model.train()
@@ -115,7 +116,7 @@ for epoch in range(num_epochs):
 
     if avg_val_loss < best_val_loss:
         best_val_loss = avg_val_loss
-        torch.save(model.state_dict(), f'{temporal_model_type}_best_model_{n_layers}_{gnn_type}_{args.agg}.pth')
+        torch.save(model.state_dict(), f'{temporal_model_type}_best_model_{n_layers}_{gnn_type}_{args.gnn_layers}_{args.agg}.pth')
         print(f'Best model saved with validation loss: {best_val_loss:.4f}')
     wandb.log({
         "epoch": epoch + 1,
@@ -139,7 +140,9 @@ for epoch in range(num_epochs):
             "intermediate_test_loss": avg_test_loss,
         })
 
-model.load_state_dict(torch.load(f'{temporal_model_type}_best_model_{n_layers}_{gnn_type}_{args.agg}.pth'))
+# testing best model
+print('loading best model for testing...')
+model.load_state_dict(torch.load(f'{temporal_model_type}_best_model_{n_layers}_{gnn_type}_{args.gnn_layers}_{args.agg}.pth'))
 model.eval()
 test_loss = 0
 with torch.no_grad():
