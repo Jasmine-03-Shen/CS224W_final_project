@@ -1,5 +1,9 @@
 # CS224W_final_project
 
+## Data
+
+https://drive.google.com/drive/folders/1viKTZOvkastV--JKocjphmGMZYd03EID?usp=sharing
+
 ## Dataset
 
 features(x): ['Close', 'Volume', 'NormClose', 'DailyLogReturn', 'ALR1W', 'ALR2W', 'ALR1M', 'ALR2M', 'RSI', 'MACD']
